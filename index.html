@@ -173,6 +173,25 @@ passwordInput.addEventListener("blur", () => {
   passwordInput.classList.remove("blinking");
 });
 
+const h2Element = document.querySelector("h2");
+
+usernameInput.addEventListener("focus", () => {
+  h2Element.style.color = "green";
+});
+
+usernameInput.addEventListener("blur", () => {
+  h2Element.style.color = "";
+});
+
+passwordInput.addEventListener("focus", () => {
+  h2Element.style.color = "green";
+});
+
+passwordInput.addEventListener("blur", () => {
+  h2Element.style.color = "";
+});
+
+
   
   
     const form = document.querySelector("form");
