@@ -2,8 +2,8 @@
 
 Sistema de verificar pagamento de alunos em uma creche
 
-Login: Admin
+Login: Gui
 
-Senha: Admin
+Senha: Marx
 
 https://droidmarx.github.io/Creche/
