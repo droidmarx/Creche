@@ -4,48 +4,122 @@
   <meta charset="utf-8">
   <title>Página de Login</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-    }
-    .container {
-      max-width: 300px;
-      margin: 100px auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 5px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      text-align: center;
-    }
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    input[type="submit"] {
-      width: 100%;
-      padding: 10px;
-      background-color: #4caf50;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    input[type="submit"]:hover {
-      background-color: #45a049;
-    }
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.troll {
+  display: flex;
+  margin: 0 auto;
+  box-sizing: border-box;
+  height: 20px;
+}
+
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  min-width: 300px;
+  margin: 5rem auto;
+  padding: 20px;
+  background-color: #ffffff83;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
+  animation: 0.5s ease;
+  animation-name: slideout;
+}
+
+img {
+  margin-top: -130px;
+  z-index: -1;
+  animation: 0.7s ease;
+  animation-name: slideout;
+}
+
+h2 {
+  text-decoration: none;
+  text-align: center;
+  margin:1rem;
+  animation: 0.7s ease;
+  animation-name: slideout;
+}
+
+@keyframes slideout {
+  1% {
+    scale: 9;
+  }
+
+  100% {
+    scale: 1;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin: 5px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+  background: #FFF;
+  color: #000;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+input[type="submit"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #4caf50;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+  background-color: #4caf90;
+}
+
+.blur {
+  filter: blur(10px);
+  transition: filter 0.6s ease-in-out;
+  animation-duration: 3s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  1% {
+    scale: 1;
+  }
+
+  100% {
+    scale: 50;
+  }
+}
   </style>
 </head>
 <body>
   
   <div class="container">
     <h2>Login</h2>
+    
     <form id="loginForm">
       <input type="text" id="username" placeholder="Usuário" required>
       <input type="password" id="password" placeholder="Senha" required>
