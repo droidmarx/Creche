@@ -343,6 +343,13 @@ function carregarAlunosDoLocalStorage() {
 // Carrega os dados do localStorage ao carregar a página
 carregarAlunosDoLocalStorage();
 
+
+//Função para verificar autenticação
+if (localStorage.getItem("token") == null) { 
+   alert("Você precisa estar logado para acessar essa página"); 
+   window.location.href = "./index.html"; 
+ }
+
   </script>
 </body>
 
