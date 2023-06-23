@@ -21,7 +21,7 @@
       display: grid;
       align-items: center;
       justify-content: center;
-      height: 200px;
+      height: fit-content;
       text-align: center;
     }
 
@@ -83,7 +83,6 @@
     
 
     .botoes{
-      background: grey;
       display: flex;
       justify-content: space-evenly;
       width: 90vw;
@@ -108,10 +107,15 @@
     <div>
       <label>Mensalidade Paga:</label>
       <div class="checkbox-group">
+        <div>
         <input type="checkbox" id="mensalidadeSim" name="mensalidade" value="sim" onclick="atualizarCheckbox(this.id)">
         <label for="mensalidadeSim">Sim</label>
+        </div
+        <div>
         <input type="checkbox" id="mensalidadeNao" name="mensalidade" value="nao" onclick="atualizarCheckbox(this.id)">
         <label for="mensalidadeNao">Não</label>
+        </div>
+        
       </div>
     </div>
 
@@ -122,7 +126,7 @@
 
     <div class="botoes">
       <button required type="button" onclick="cadastrarAluno()">Cadastrar</button>
-      <button type="button" onclick="buscarAluno()">Buscar</button>
+      <button type="button" id="btnBuscar" onclick="buscarAluno()">Buscar</button>
      <button onclick="excluirAlunosSelecionados()">Excluir</button>
     </div>
   </form>
@@ -261,6 +265,46 @@ function excluirAlunosSelecionados() {
     salvarAlunosNoLocalStorage();
   }
 }
+
+function buscarAluno() {
+  const nome = document.getElementById("nome").value;
+
+  if (!nome) {
+    alert("Por favor, insira o nome do aluno para buscar.");
+    return;
+  }
+
+  const alunoEncontrado = alunos.find(function(aluno) {
+    return aluno.nome === nome;
+  });
+
+  if (alunoEncontrado) {
+    // Limpa os campos do formulário
+    document.getElementById("nome").value = "";
+
+    // Marca o checkbox do aluno encontrado
+    const checkboxes = document.getElementsByClassName("selecionar-aluno");
+    for (let i = 0; i < checkboxes.length; i++) {
+      const checkbox = checkboxes[i];
+      const row = checkbox.parentNode.parentNode;
+      const nomeCell = row.cells[1];
+      if (nomeCell.innerHTML === alunoEncontrado.nome) {
+        checkbox.checked = true;
+        break;
+      }
+    }
+
+    // Centraliza a tabela no viewport
+    const tabela = document.getElementById("tabela");
+    tabela.scrollIntoView({ behavior: "smooth", block: "center" });
+  } else {
+    alert("Aluno não encontrado.");
+  }
+}
+
+
+
+
 
 // Função para salvar os dados no localStorage
 function salvarAlunosNoLocalStorage() {
