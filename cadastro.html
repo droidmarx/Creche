@@ -2,8 +2,10 @@
 <html lang="pt-br">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <meta charset="UTF-8"> 
+   <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Cadastro</title>
   <style>
     body {
@@ -33,11 +35,11 @@
 
     label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+      text-align: center;
     }
 
     input[type="text"],
-    input[type="checkbox"],
     input[type="date"]{
       margin-bottom: 10px;
       width: fit-content;
@@ -52,10 +54,12 @@
     .checkbox-group {
       display: flex;
       align-items: center;
+      width: 30%;
+      margin: 0 auto;
     }
 
     .checkbox-group label {
-      width: 50px;
+     width: 50px;
     }
 
     button {
@@ -107,17 +111,21 @@
     <div>
       <label>Mensalidade Paga:</label>
       <div class="checkbox-group">
+      
         <div>
         <input type="checkbox" id="mensalidadeSim" name="mensalidade" value="sim" onclick="atualizarCheckbox(this.id)">
         <label for="mensalidadeSim">Sim</label>
-        </div
+        </div>
+        
         <div>
         <input type="checkbox" id="mensalidadeNao" name="mensalidade" value="nao" onclick="atualizarCheckbox(this.id)">
         <label for="mensalidadeNao">Não</label>
         </div>
         
+        </div>
+        
       </div>
-    </div>
+    
 
     <div>
       <label for="data-pagamento">Data de Pagamento:</label>
