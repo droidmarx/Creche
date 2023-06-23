@@ -123,6 +123,7 @@
     <div class="botoes">
       <button required type="button" onclick="cadastrarAluno()">Cadastrar</button>
       <button type="button" onclick="buscarAluno()">Buscar</button>
+     <button onclick="excluirAlunosSelecionados()">Excluir</button>
     </div>
   </form>
 
@@ -142,181 +143,154 @@
   </table>
 
   <script>
-     // Obtém uma referência para o botão
-     var btnSair = document.getElementById('btnSair');
-     
-     // Adiciona um evento de clique ao botão
-     btnSair.addEventListener('click', function() {
-       // Redireciona para a página index.html
-       window.location.href = 'index.html';
-     });
+    // Obtém uma referência para o botão
+var btnSair = document.getElementById('btnSair');
 
+// Adiciona um evento de clique ao botão
+btnSair.addEventListener('click', function() {
+  // Redireciona para a página index.html
+  window.location.href = 'index.html';
+});
+
+
+// Array para armazenar os alunos cadastrados
+let alunos = [];
+
+// Função para cadastrar um novo aluno
+function cadastrarAluno() {
+  const nome = document.getElementById("nome").value;
+  const dataPagamentoValue = document.getElementById("data-pagamento").value;
+
+  if (!nome || !dataPagamentoValue) {
+    alert("Você não preencheu todos os requisitos.");
+    return;
+  }
+
+  const dataPagamento = new Date(dataPagamentoValue);
+
+  if (isNaN(dataPagamento)) {
+    alert("A data de pagamento é inválida.");
+    return;
+  }
+
+  const mensalidadeSim = document.getElementById("mensalidadeSim");
+  const mensalidadeNao = document.getElementById("mensalidadeNao");
+
+  let mensalidadePaga;
+
+  if (mensalidadeSim.checked) {
+    mensalidadePaga = true;
+    mensalidadeNao.checked = false; // Desmarca o checkbox "Não"
+  } else if (mensalidadeNao.checked) {
+    mensalidadePaga = false;
+    mensalidadeSim.checked = false; // Desmarca o checkbox "Sim"
+  }
+
+  // Cria um objeto aluno com as informações
+  const aluno = {
+    nome: nome,
+    dataPagamento: dataPagamento.toLocaleDateString('pt-BR'),
+    mensalidadePaga: mensalidadePaga
+  };
+
+  // Adiciona o aluno ao array de alunos
+  alunos.push(aluno);
+
+  // Limpa os campos do formulário
+  document.getElementById("nome").value = "";
+  document.getElementById("data-pagamento").value = "";
+  mensalidadeSim.checked = false;
+  mensalidadeNao.checked = false;
+
+  // Atualiza a tabela de alunos cadastrados
+  exibirAlunos();
+
+  // Salva os dados no localStorage
+  salvarAlunosNoLocalStorage();
+}
+
+// Função para exibir os alunos cadastrados na tabela
+function exibirAlunos() {
+  const tabela = document.getElementById("alunos-lista");
+  tabela.innerHTML = "";
+
+  for (let i = 0; i < alunos.length; i++) {
+    const aluno = alunos[i];
+
+    const row = tabela.insertRow();
+    const checkboxCell = row.insertCell(0);
+    const nomeCell = row.insertCell(1);
+    const dataPagamentoCell = row.insertCell(2);
+    const mensalidadeCell = row.insertCell(3);
+    const excluirCell = row.insertCell(4);
+
+    checkboxCell.innerHTML = '<input type="checkbox" class="selecionar-aluno">';
+    nomeCell.innerHTML = aluno.nome;
+    dataPagamentoCell.innerHTML = aluno.dataPagamento;
+    mensalidadeCell.innerHTML = aluno.mensalidadePaga ? "Sim" : "Não";
+  }
+}
+
+// Função para excluir os alunos selecionados
+function excluirAlunosSelecionados() {
+  const checkboxes = document.getElementsByClassName("selecionar-aluno");
+  const indicesExcluir = [];
+
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      indicesExcluir.push(i);
+    }
+  }
+
+  if (indicesExcluir.length === 0) {
+    alert("Nenhum aluno selecionado para exclusão.");
+    return;
+  }
+
+  const confirmacao = confirm("Tem certeza que deseja excluir os alunos selecionados?");
+  if (confirmacao) {
+    // Remove os alunos do array pelos índices em ordem decrescente
+    for (let i = indicesExcluir.length - 1; i >= 0; i--) {
+      const index = indicesExcluir[i];
+      alunos.splice(index, 1);
+    }
+
+    exibirAlunos(); // Atualiza a tabela de alunos cadastrados
+
+    // Salva os dados no localStorage
+    salvarAlunosNoLocalStorage();
+  }
+}
+
+// Função para salvar os dados no localStorage
+function salvarAlunosNoLocalStorage() {
+  localStorage.setItem("alunos", JSON.stringify(alunos));
+}
+
+    // Função para atualizar o checkbox "Sim" e "Não" de acordo com o selecionado 
+     function atualizarCheckbox(id) { 
+       const checkboxSim = document.getElementById("mensalidadeSim"); 
+       const checkboxNao = document.getElementById("mensalidadeNao"); 
   
-    // Array para armazenar os alunos cadastrados
-    let alunos = [];
+       if (id === "mensalidadeSim") { 
+         checkboxNao.checked = false; // Desmarca o checkbox "Não" 
+       } else if (id === "mensalidadeNao") { 
+         checkboxSim.checked = false; // Desmarca o checkbox "Sim" 
+       } 
+     }
 
-    // Função para cadastrar um novo aluno
-    function cadastrarAluno() {
-      const nome = document.getElementById("nome").value;
-      const dataPagamentoValue = document.getElementById("data-pagamento").value;
+// Função para carregar os dados do localStorage
+function carregarAlunosDoLocalStorage() {
+  const alunosString = localStorage.getItem("alunos");
+  if (alunosString) {
+    alunos = JSON.parse(alunosString);
+    exibirAlunos();
+  }
+}
 
-      if (!nome || !dataPagamentoValue) {
-        alert("Você não preencheu todos os requisitos.");
-        return;
-      }
+// Carrega os dados do localStorage ao carregar a página
+carregarAlunosDoLocalStorage();
 
-      const dataPagamento = new Date(dataPagamentoValue);
-
-      if (isNaN(dataPagamento)) {
-        alert("A data de pagamento é inválida.");
-        return;
-      }
-
-      const mensalidadeSim = document.getElementById("mensalidadeSim");
-      const mensalidadeNao = document.getElementById("mensalidadeNao");
-
-      let mensalidadePaga;
-
-      if (mensalidadeSim.checked) {
-        mensalidadePaga = true;
-        mensalidadeNao.checked = false; // Desmarca o checkbox "Não"
-      } else if (mensalidadeNao.checked) {
-        mensalidadePaga = false;
-        mensalidadeSim.checked = false; // Desmarca o checkbox "Sim"
-      }
-
-      // Cria um objeto aluno com as informações
-      const aluno = {
-        nome: nome,
-        dataPagamento: dataPagamento.toLocaleDateString('pt-BR'),
-        mensalidadePaga: mensalidadePaga
-      };
-
-      // Adiciona o aluno ao array de alunos
-      alunos.push(aluno);
-
-      // Limpa os campos do formulário
-      document.getElementById("nome").value = "";
-      document.getElementById("data-pagamento").value = "";
-      mensalidadeSim.checked = false;
-      mensalidadeNao.checked = false;
-
-      // Atualiza a tabela de alunos cadastrados
-      exibirAlunos();
-
-      // Salva os dados no localStorage
-      salvarAlunosNoLocalStorage();
-    }
-
-    // Função para exibir os alunos cadastrados na tabela
-    function exibirAlunos() {
-      const tabela = document.getElementById("alunos-lista");
-      tabela.innerHTML = "";
-
-      for (let i = 0; i < alunos.length; i++) {
-        const aluno = alunos[i];
-
-        const row = tabela.insertRow();
-        const checkboxCell = row.insertCell(0);
-        const nomeCell = row.insertCell(1);
-        const dataPagamentoCell = row.insertCell(2);
-        const mensalidadeCell = row.insertCell(3);
-        const excluirCell = row.insertCell(4);
-
-        checkboxCell.innerHTML = '<input type="checkbox" class="selecionar-aluno">';
-        nomeCell.innerHTML = aluno.nome;
-        dataPagamentoCell.innerHTML = aluno.dataPagamento;
-        mensalidadeCell.innerHTML = aluno.mensalidadePaga ? "Sim" : "Não";
-        excluirCell.innerHTML = '<button onclick="excluirAluno(' + i + ')">Excluir</button>';
-      }
-    }
-
-    // Função para excluir um aluno pelo índice
-    function excluirAluno(index) {
-      const confirmacao = confirm("Tem certeza que deseja excluir o aluno?");
-      if (confirmacao) {
-        alunos.splice(index, 1); // Remove o aluno do array
-        exibirAlunos(); // Atualiza a tabela de alunos cadastrados
-
-        // Salva os dados no localStorage
-        salvarAlunosNoLocalStorage();
-      }
-    }
-
-  // Função para buscar um aluno pelo nome
-    function buscarAluno() {
-      const busca = document.getElementById("nome").value.toLowerCase();
-      const resultados = alunos.filter(aluno => aluno.nome.toLowerCase().includes(busca));
-
-      const tabela = document.getElementById("alunos-lista");
-      tabela.innerHTML = "";
-
-      let alunoEncontrado = false;
-
-      for (let i = 0; i < resultados.length; i++) {
-        const aluno = resultados[i];
-
-        const row = tabela.insertRow();
-        const checkboxCell = row.insertCell(0);
-        const nomeCell = row.insertCell(1);
-        const dataPagamentoCell = row.insertCell(2);
-        const mensalidadeCell = row.insertCell(3);
-        const excluirCell = row.insertCell(4);
-
-        checkboxCell.innerHTML = '<input type="checkbox" class="selecionar-aluno">';
-        nomeCell.innerHTML = aluno.nome;
-        dataPagamentoCell.innerHTML = aluno.dataPagamento;
-        mensalidadeCell.innerHTML = aluno.mensalidadePaga ? "Sim" : "Não";
-        excluirCell.innerHTML = '<button onclick="excluirAluno(' + i + ')">Excluir</button>';
-
-        if (aluno.nome.toLowerCase() === busca) {
-          alunoEncontrado = true;
-          row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          checkboxCell.firstChild.checked = true;
-        }
-      }
-
-      if (!alunoEncontrado) {
-        alert("Aluno não encontrado.");
-      }
-    }
-    // Função para atualizar o checkbox "Sim" e "Não" de acordo com o selecionado
-    function atualizarCheckbox(id) {
-      const checkboxSim = document.getElementById("mensalidadeSim");
-      const checkboxNao = document.getElementById("mensalidadeNao");
-
-      if (id === "mensalidadeSim") {
-        checkboxNao.checked = false; // Desmarca o checkbox "Não"
-      } else if (id === "mensalidadeNao") {
-        checkboxSim.checked = false; // Desmarca o checkbox "Sim"
-      }
-    }
-
-    // Função para carregar os dados dos alunos do localStorage
-    function carregarAlunosDoLocalStorage() {
-      const alunosJson = localStorage.getItem("alunos");
-
-      if (alunosJson) {
-        alunos = JSON.parse(alunosJson);
-        exibirAlunos(); // Atualiza a tabela de alunos cadastrados
-      }
-    }
-
-    // Função para salvar os dados dos alunos no localStorage
-    function salvarAlunosNoLocalStorage() {
-      const alunosJson = JSON.stringify(alunos);
-      localStorage.setItem("alunos", alunosJson);
-    }
-
-    // Carrega os dados dos alunos do localStorage ao carregar a página
-    window.addEventListener("DOMContentLoaded", function () {
-      carregarAlunosDoLocalStorage();
-    });
-    
-    if (localStorage.getItem("token") == null) { 
-   alert("Você precisa estar logado para acessar essa página"); 
-   window.location.href = "./index.html"; 
- }
   </script>
 </body>
 
