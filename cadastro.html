@@ -187,13 +187,14 @@ clearStorageBtn.addEventListener("click", () => {
  function handleLogout() { 
    localStorage.removeItem("token"); 
    setTimeout(() => { 
-     window.location.href = "./index.html"; 
+     window.location.href = "index.html"; 
    }, 200); 
  }
   
   
     // Obtém uma referência para o botão
-var btnSair = document.getElementById('btnSair');
+var btnSair = document.getElementById('clear-storage-btn');
+
 
 // Adiciona um evento de clique ao botão
 btnSair.addEventListener('click', function() {
