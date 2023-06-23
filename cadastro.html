@@ -99,7 +99,7 @@
 </head>
 
 <body>
-  <button id="btnSair">Sair</button>
+  <button id="btnSair" onclick="handleLogout">Sair</button>
   <h1>Sistema de Cadastro</h1>
 
   <form>
@@ -136,6 +136,13 @@
       <button required type="button" onclick="cadastrarAluno()">Cadastrar</button>
       <button type="button" id="btnBuscar" onclick="buscarAluno()">Buscar</button>
      <button onclick="excluirAlunosSelecionados()">Excluir</button>
+     
+     
+     <button type="button" id="clear-storage-btn">Limpar Local Storage</button>
+
+     
+     
+     
     </div>
   </form>
 
@@ -155,6 +162,32 @@
   </table>
 
   <script>
+  
+  
+  const clearStorageBtn = document.querySelector("#clear-storage-btn");
+
+clearStorageBtn.addEventListener("click", () => {
+  localStorage.clear();
+  alert("Dados do Local Storage foram removidos com sucesso!");
+});
+
+  
+  
+  
+  
+ if  (localStorage.getItem("token") == null) { 
+   alert("Você precisa estar logado para acessar essa página"); 
+   window.location.href = "./index.html"; 
+ } 
+  
+ function handleLogout() { 
+   localStorage.removeItem("token"); 
+   setTimeout(() => { 
+     window.location.href = "./index.html"; 
+   }, 200); 
+ }
+  
+  
     // Obtém uma referência para o botão
 var btnSair = document.getElementById('btnSair');
 
@@ -344,11 +377,6 @@ function carregarAlunosDoLocalStorage() {
 carregarAlunosDoLocalStorage();
 
 
-//Função para verificar autenticação
-if (localStorage.getItem("token") == null) { 
-   alert("Você precisa estar logado para acessar essa página"); 
-   window.location.href = "./index.html"; 
- }
 
   </script>
 </body>
