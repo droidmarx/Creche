@@ -14,12 +14,6 @@
   display: none;
 }
 
-.troll {
-  display: flex;
-  margin: 0 auto;
-  box-sizing: border-box;
-  height: 20px;
-}
 
 body {
   font-family: sans-serif;
@@ -69,6 +63,10 @@ form {
 label {
   margin: 5px;
   font-weight: bold;
+}
+
+.container{
+  width: 100%
 }
 
 input[type="text"],
@@ -128,18 +126,49 @@ input[type="submit"]:hover {
   </div>
 
   <script>
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
-      event.preventDefault();
+    const form = document.querySelector("form");
 
-      var username = document.getElementById("username").value;
-      var password = document.getElementById("password").value;
+const loginBtn = document.querySelector("#login-btn");
 
-      if (username === "Admin" && password === "Admin") {
-        window.location.href = "cadastro.html";
-      } else {
-        alert("Usuário ou senha inválidos. Tente novamente.");
-      }
-    });
+
+const users = [
+  { username: "Gui", password: "Marx" },
+  { username: "Admin", password: "Admin" }
+  // adicionar mais usuarios
+];
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const username = form.username.value.trim();
+  const password = form.password.value.trim();
+
+  let authenticated = false;
+  for (let user of users) {
+    if (user.username === username && user.password === password) {
+      authenticated = true;
+      break;
+    }
+  }
+
+  if (authenticated) {
+    document.body.classList.add("blur");
+    setTimeout(function () {
+      window.location.href = "cadastro.html";
+    }, 500);
+
+    let mathRandom = Math.random().toString(16).substr(2);
+    let token = mathRandom + mathRandom;
+
+    localStorage.setItem("token", token);
+  } else if (username === "" || password === "") {
+    alert("Por favor, insira um nome de usuário e senha");
+  } else {
+    alert("Usuário ou senha incorretos");
+    form.reset();
+  }
+});
+
   </script>
 </body>
 </html>
