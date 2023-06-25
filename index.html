@@ -77,7 +77,7 @@ label {
 
 input[type="text"],
 input[type="password"] {
-  background: #FFF;
+  background: #FFF
   color: #000;
   padding: 10px;
   border-radius: 5px;
@@ -94,12 +94,15 @@ input[type="password"].blinking {
   color:green;
 }
 
+
+
 @keyframes blink {
   0% {
     border-color: #ccc;
   }
   50% {
     border-color: #4CAF50;
+    color: #4caf50;
   }
   100% {
     border-color: #ccc;
@@ -143,7 +146,7 @@ button[type="submit"] {
 <body>
   
   <div class="container">
-    <h2>Login</h2>
+    <h2><span>Login<span></h2>
     
     <form id="loginForm">
       <input type="text" id="username" placeholder="Usuário" required>
@@ -155,7 +158,34 @@ button[type="submit"] {
   <script>
   
   const usernameInput = document.querySelector("#username");
-const passwordInput = document.querySelector("#password");
+  const passwordInput = document.querySelector("#password");
+
+
+
+usernameInput.addEventListener("focus", () => {
+  usernameInput.removeAttribute("placeholder");
+});
+
+usernameInput.addEventListener("blur", () => {
+  if (!usernameInput.value) {
+    usernameInput.setAttribute("placeholder", "Usuário");
+  }
+});
+
+passwordInput.addEventListener("focus", () => {
+  passwordInput.removeAttribute("placeholder");
+});
+
+passwordInput.addEventListener("blur", () => {
+  if (!passwordInput.value) {
+    passwordInput.setAttribute("placeholder", "Senha");
+  }
+});
+
+
+
+
+
 
 usernameInput.addEventListener("focus", () => {
   usernameInput.classList.add("blinking");
@@ -173,7 +203,7 @@ passwordInput.addEventListener("blur", () => {
   passwordInput.classList.remove("blinking");
 });
 
-const h2Element = document.querySelector("h2");
+const h2Element = document.querySelector("span");
 
 usernameInput.addEventListener("focus", () => {
   h2Element.style.color = "green";
@@ -194,7 +224,7 @@ passwordInput.addEventListener("blur", () => {
 
   
   
-    const form = document.querySelector("form");
+const form = document.querySelector("form");
 
 const loginBtn = document.querySelector("#login-btn");
 
@@ -202,6 +232,8 @@ const loginBtn = document.querySelector("#login-btn");
 const users = [
   { username: "Gui", password: "Marx" },
   { username: "Admin", password: "Admin" },
+  { username: ".", password: "." },
+
   // adicionar mais usuarios
 ];
 
@@ -228,7 +260,7 @@ form.addEventListener("submit", (e) => {
     let mathRandom = Math.random().toString(16).substr(2);
     let token = mathRandom + mathRandom;
 
-    localStorage.setItem("token", token);
+    sessionStorage.setItem("token", token);
   } else if (username === "" || password === "") {
     alert("Por favor, insira um nome de usuário e senha");
   } else {
