@@ -2,11 +2,14 @@
 <html lang="pt-br">
 
 <head>
+ <meta charset="UTF-8"> 
+ 
+ <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
   
-    <meta charset="UTF-8"> 
-   <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <title>Sistema de Cadastro</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -49,6 +52,9 @@
     
     input#nome{
       text-align: center;
+      outline-color: seagreen;
+      caret-color: #4CAF50;
+
     }
 
     .checkbox-group {
@@ -60,6 +66,7 @@
 
     .checkbox-group label {
      width: 50px;
+     
     }
 
     button {
@@ -95,20 +102,84 @@
     #tabela{
       margin-top: 70px;
     }
+    
+    .modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modal th,
+.modal td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.menu-opcoes{
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+  position: fixed;
+  background: grey;
+  width: 100vw;
+  top: 0px;
+  left: 0px;
+  padding: 5px;
+}
+
+.menu-opcoes button:nth-child(3){
+  margin-right: 20px;
+}
+
+
   </style>
 </head>
 
 <body>
-      <button onclick="handleLogout()">Sair</button>
+  
+
+
+
+  <div id="menu" class="menu-opcoes">
+    
+    <button class="button" onclick="exibirAlunosModal()">Mostrar Alunos</button>
+    
+    <button style="display: none" type="button" id="clear-storage-btn">Limpar Local Storage</button>
+    
+    <button onclick="handleLogout()">Sair</button>
+
+  </div>
+
+      <br><br>
       
-           <button style="display: none" type="button" id="clear-storage-btn">Limpar Local Storage</button>
+      <h1>Sistema de Cadastro</h1>
+
   
-  
-  <h1>Sistema de Cadastro</h1>
 
   <form>
     <div>
-      <label for="nome">-</label>
+      <label for="nome">__</label>
       <input placeholder="Nome" type="text" id="nome" name="nome">
     </div>
 
@@ -142,11 +213,6 @@
      <button onclick="excluirAlunosSelecionados()">Excluir</button>
      
      
-
-
-     
-     
-     
     </div>
   </form>
 
@@ -167,6 +233,7 @@
 
   <script>
   
+
   
   const clearStorageBtn = document.querySelector("#clear-storage-btn");
 
@@ -179,13 +246,13 @@ clearStorageBtn.addEventListener("click", () => {
   
   
   
- if  (localStorage.getItem("token") == null) { 
+ if  (sessionStorage.getItem("token") == null) { 
    alert("Você precisa estar logado para acessar essa página"); 
    window.location.href = "./index.html"; 
  } 
   
  function handleLogout() { 
-   localStorage.removeItem("token"); 
+   sessionStorage.removeItem("token"); 
    setTimeout(() => { 
      window.location.href = "index.html"; 
    }, 200); 
@@ -320,23 +387,24 @@ function buscarAluno() {
     return;
   }
 
-  const alunoEncontrado = alunos.find(function(aluno) {
+  const alunosEncontrados = alunos.filter(function(aluno) {
     return aluno.nome === nome;
   });
 
-  if (alunoEncontrado) {
+  if (alunosEncontrados.length > 0) {
     // Limpa os campos do formulário
     document.getElementById("nome").value = "";
 
-    // Marca o checkbox do aluno encontrado
+    // Marca os checkboxes dos alunos encontrados
     const checkboxes = document.getElementsByClassName("selecionar-aluno");
     for (let i = 0; i < checkboxes.length; i++) {
       const checkbox = checkboxes[i];
       const row = checkbox.parentNode.parentNode;
       const nomeCell = row.cells[1];
-      if (nomeCell.innerHTML === alunoEncontrado.nome) {
+      if (alunosEncontrados.some(function(a) { return a.nome === nomeCell.innerHTML })) {
         checkbox.checked = true;
-        break;
+      } else {
+        checkbox.checked = false;
       }
     }
 
@@ -344,9 +412,10 @@ function buscarAluno() {
     const tabela = document.getElementById("tabela");
     tabela.scrollIntoView({ behavior: "smooth", block: "center" });
   } else {
-    alert("Aluno não encontrado.");
+    alert("Nenhum aluno encontrado com esse nome.");
   }
 }
+
 
 
 
@@ -377,6 +446,73 @@ function carregarAlunosDoLocalStorage() {
     exibirAlunos();
   }
 }
+
+// Função para exibir os alunos cadastrados em um modal
+function exibirAlunosModal() {
+  const modal = document.createElement("div");
+  modal.classList.add("modal");
+
+  const modalContent = document.createElement("div");
+  modalContent.classList.add("modal-content");
+
+  const tabela = document.createElement("table");
+  tabela.id = "alunos-lista-modal";
+
+  const thead = document.createElement("thead");
+  const tr = document.createElement("tr");
+  const thNome = document.createElement("th");
+  thNome.textContent = "Nome";
+  const thDataPagamento = document.createElement("th");
+  thDataPagamento.textContent = "Data do Pagamento";
+  const thMensalidade = document.createElement("th");
+  thMensalidade.textContent = "Pagamento";
+
+  tr.appendChild(thNome);
+  tr.appendChild(thDataPagamento);
+  tr.appendChild(thMensalidade);
+  thead.appendChild(tr);
+
+  const tbody = document.createElement("tbody");
+
+  for (let i = 0; i < alunos.length; i++) {
+    const aluno = alunos[i];
+
+    const row = document.createElement("tr");
+    const nomeCell = document.createElement("td");
+    nomeCell.textContent = aluno.nome;
+    const dataPagamentoCell = document.createElement("td");
+    dataPagamentoCell.textContent = aluno.dataPagamento;
+    const mensalidadeCell = document.createElement("td");
+    mensalidadeCell.textContent = aluno.mensalidadePaga ? "Sim" : "Não";
+
+    row.appendChild(nomeCell);
+    row.appendChild(dataPagamentoCell);
+    row.appendChild(mensalidadeCell);
+
+    tbody.appendChild(row);
+  }
+
+  tabela.appendChild(thead);
+  tabela.appendChild(tbody);
+  modalContent.appendChild(tabela);
+  modal.appendChild(modalContent);
+
+  document.body.appendChild(modal);
+
+  // Aplica o efeito de blur ao restante da página
+  const mainContent = document            .querySelector("body > *:not(.modal)");
+  //mainContent.style.filter = "blur(5px)";
+
+  // Adiciona evento de clique para fechar o modal
+  modal.addEventListener("click", function(event) {
+    if (event.target === modal) {
+      document.body.removeChild(modal);
+      mainContent.style.filter = "none";
+    }
+  });
+}
+
+
 
 // Carrega os dados do localStorage ao carregar a página
 carregarAlunosDoLocalStorage();
