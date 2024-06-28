@@ -1,0 +1,141 @@
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      margin-bottom: 20px;
+      background: grey;
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      height: fit-content;
+      text-align: center;
+    }
+
+    .checkbox-group{
+      margin: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    input[type="text"],
+    input[type="date"]{
+      margin-bottom: 10px;
+      width: fit-content;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    
+    input#nome{
+      text-align: center;
+      outline-color: seagreen;
+      caret-color: #4CAF50;
+
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      width: 30%;
+      margin: 0 auto;
+    }
+
+    .checkbox-group label {
+     width: 50px;
+     
+    }
+
+    button {
+      display: block;
+      margin: 10px 0;
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+
+    .botoes{
+      display: flex;
+      justify-content: space-evenly;
+      width: 90vw;
+    }
+
+    #tabela{
+      margin-top: 70px;
+    }
+    
+    .modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modal th,
+.modal td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.menu-opcoes{
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+  position: fixed;
+  background: grey;
+  width: 100vw;
+  top: 0px;
+  left: 0px;
+  padding: 5px;
+}
+
+.menu-opcoes button:nth-child(3){
+  margin-right: 20px;
+}
